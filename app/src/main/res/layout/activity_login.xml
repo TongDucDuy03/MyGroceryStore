@@ -26,7 +26,7 @@
         android:drawablePadding="13dp"
         android:elevation="3dp"
         android:padding="13dp"
-        android:text="Email"
+        android:hint="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/red_img"
@@ -43,7 +43,8 @@
         android:drawablePadding="10dp"
         android:elevation="3dp"
         android:padding="13dp"
-        android:text="Password"
+        android:hint="Password"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_login"
@@ -87,4 +88,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <ProgressBar
+        android:id="@+id/progreesbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias=".1"
+        android:scaleY=".5"
+        android:scaleX=".5"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
