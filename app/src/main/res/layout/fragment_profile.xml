@@ -6,8 +6,89 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/profile_img"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="15dp"
+        />
+
+    <EditText
+        android:id="@+id/profile_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Profile"/>
+        android:background="@drawable/edittext_bg"
+        android:hint="Your name"
+        android:padding="13dp"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/ic_baseline_person_24"
+        android:elevation="3dp"
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_img" />
+    <EditText
+        android:inputType="textEmailAddress"
+        android:id="@+id/profile_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_bg"
+        android:hint="Your Email"
+        android:padding="13dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/account"
+        android:elevation="3dp"
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+    <EditText
+        android:inputType="textPassword"
+        android:id="@+id/profile_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_bg"
+        android:hint="Phone Number"
+        android:padding="13dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_baseline_local_phone_24"
+        android:elevation="3dp"
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_email" />
+    <EditText
+        android:id="@+id/profile_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_bg"
+        android:hint="Your Address"
+        android:padding="13dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_baseline_location_on_24"
+        android:elevation="3dp"
+        app:layout_constraintWidth_percent=".8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_number" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:text="Update"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_address"
+        app:layout_constraintVertical_bias="0.3"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
