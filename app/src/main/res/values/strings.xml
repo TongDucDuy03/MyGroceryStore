@@ -18,4 +18,5 @@
     <string name="new_products">New Products</string>
     <string name="my_orders">My Orders</string>
     <string name="my_carts">My Carts</string>
+    <string name="description">Lorem Ipsum is simply dummy text, used for layout and layout for printing. Lorem Ipsum has been used as a standard text for the printing industry since the 1500s, when an unknown artist joined several pieces of text together to make a type specimen.</string>
 </resources>
