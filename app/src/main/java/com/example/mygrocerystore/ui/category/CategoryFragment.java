@@ -5,6 +5,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,15 +34,17 @@ public class CategoryFragment extends Fragment {
     FirebaseFirestore db;
     List<NavCategroryModel> categroryModelList;
     NavCategoryAdapter navCategoryAdapter;
-
+    ProgressBar progressBar;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_category, container, false);
         db = FirebaseFirestore.getInstance();
+        progressBar = root.findViewById(R.id.progreesbar);
+        progressBar.setVisibility(View.VISIBLE);
         recyclerView = root.findViewById(R.id.cat_rec);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+        recyclerView.setVisibility(View.GONE);
         categroryModelList = new ArrayList<>();
         navCategoryAdapter = new NavCategoryAdapter(getActivity(), categroryModelList);
         recyclerView.setAdapter(navCategoryAdapter);
@@ -56,9 +59,13 @@ public class CategoryFragment extends Fragment {
                                 NavCategroryModel navCategroryModel = document.toObject(NavCategroryModel.class);
                                 categroryModelList.add(navCategroryModel);
                                 navCategoryAdapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                         } else {
                             Toast.makeText(getActivity(), "Error"+task.getException(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }
                     }
                 });
