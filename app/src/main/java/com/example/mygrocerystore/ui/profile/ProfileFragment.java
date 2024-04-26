@@ -124,14 +124,18 @@ public class ProfileFragment extends Fragment {
         reference.putFile(profileUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Upload thành công
-                    Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
-                    reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            database.getReference().child("User").child(FirebaseAuth.getInstance().getUid())
-                                    .child("profileImg").setValue(profileUri.toString());
-                            Toast.makeText(getContext(),"Profile Picture Uploaded",Toast.LENGTH_SHORT).show();
-                        }
+                    reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String downloadUrl = uri.toString();
+                        // Lưu đường dẫn tải xuống vào Realtime Database
+                        database.getReference().child("User").child(FirebaseAuth.getInstance().getUid())
+                                .child("profileImg").setValue(downloadUrl)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getContext(),"Profile Picture Uploaded",Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(),"Failed to upload profile picture",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     });
                 })
                 .addOnFailureListener(e -> {
@@ -139,6 +143,7 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getContext(), "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     // Cập nhật thông tin người dùng
     private void updateUserProfile() {
