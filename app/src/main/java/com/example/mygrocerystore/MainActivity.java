@@ -1,25 +1,24 @@
 package com.example.mygrocerystore;
 
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
-import com.bumptech.glide.Glide;
-import com.example.mygrocerystore.models.UserModel;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.mygrocerystore.databinding.ActivityMainBinding;
+import com.example.mygrocerystore.models.UserModel;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    FirebaseAuth auth;
-    FirebaseDatabase database;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +45,15 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
 
-
-        
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_category, R.id.nav_profile,R.id.nav_offers,R.id.nav_new_products,
-                R.id.nav_my_orders,R.id.nav_my_carts)
+                R.id.nav_home, R.id.nav_category, R.id.nav_profile, R.id.nav_offers, R.id.nav_new_products,
+                R.id.nav_my_orders, R.id.nav_my_carts)
                 .setOpenableLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -66,27 +63,38 @@ public class MainActivity extends AppCompatActivity {
         TextView headerEmail = headerView.findViewById(R.id.nav_header_email);
         CircleImageView headerImg = headerView.findViewById(R.id.nav_header_img);
 
-        database.getReference().child("User").child(FirebaseAuth.getInstance().getUid())
+        database.getReference().child("User").child(auth.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         UserModel userModel = snapshot.getValue(UserModel.class);
 
-                        headerName.setText(userModel.getName());
-                        headerEmail.setText(userModel.getEmail());
-                        Glide.with(MainActivity.this).load(userModel.getProfileImg()).into(headerImg);
+                        if (userModel != null) {
+                            headerName.setText(userModel.getName());
+                            headerEmail.setText(userModel.getEmail());
+
+                            if (userModel.getProfileImg() != null) {
+                                Glide.with(MainActivity.this).load(userModel.getProfileImg()).into(headerImg);
+                            } else {
+                                headerImg.setImageResource(R.drawable.profile);
+                            }
+                        } else {
+                            Log.d("FirebaseData", "UserModel is null");
+                            headerName.setText("Your Name");
+                            headerEmail.setText("Your Email");
+                            headerImg.setImageResource(R.drawable.profile);
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(MainActivity.this, "Failed to load user data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }

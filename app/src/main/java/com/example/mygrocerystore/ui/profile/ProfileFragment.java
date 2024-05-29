@@ -59,7 +59,6 @@ public class ProfileFragment extends Fragment {
         getContentLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 result -> {
                     if (result != null) {
-                        // Xử lý hình ảnh đã chọn
                         handleSelectedImage(result);
                     }
                 });
@@ -76,42 +75,60 @@ public class ProfileFragment extends Fragment {
         address = root.findViewById(R.id.profile_address);
         update = root.findViewById(R.id.update);
 
-
-
         // Thiết lập sự kiện click cho ImageView
         profileImg.setOnClickListener(v -> openImagePicker());
 
         // Thiết lập sự kiện click cho nút Update
         update.setOnClickListener(v -> updateUserProfile());
+
+        // Lấy thông tin người dùng từ Firebase Realtime Database
         database.getReference().child("User").child(FirebaseAuth.getInstance().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         UserModel userModel = snapshot.getValue(UserModel.class);
+                        if (userModel != null ) {
+                            // Hiển thị thông tin người dùng lên các EditText tương ứng
+                            name.setText(userModel.getName());
+                            email.setText(userModel.getEmail());
+//                            number.setText(userModel.getPhoneNumber());
+//                            address.setText(userModel.getAddress());
 
-                        Glide.with(getContext()).load(userModel.getProfileImg()).into(profileImg);
+                            // Load hình ảnh người dùng lên ImageView
+                            if(userModel.getProfileImg() != null){
+                                Glide.with(requireContext()).load(userModel.getProfileImg()).into(profileImg);
+                            }
+                            else {
+                                Glide.with(requireContext()).load(R.drawable.profile).into(profileImg);
+                            }
+
+                        } else {
+                            name.setText("Your Name");
+                            email.setText("Your Email");
+                            number.setText("Your Phone Number");
+                            address.setText("Your Address");
+
+                            // Load hình ảnh mặc định lên ImageView
+                            Glide.with(requireContext()).load(R.drawable.profile).into(profileImg);
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(requireContext(), "Failed to load user data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
         return root;
     }
 
-    // Mở Activity để chọn hình ảnh
     private void openImagePicker() {
         getContentLauncher.launch("image/*");
     }
 
-    // Xử lý hình ảnh đã chọn từ bộ nhớ thiết bị
     private void handleSelectedImage(Uri profileUri) {
-        // Hiển thị hình ảnh đã chọn lên ImageView
         profileImg.setImageURI(profileUri);
 
-        // Upload hình ảnh lên Firebase Storage
         uploadImageToFirebase(profileUri);
     }
 
@@ -131,21 +148,21 @@ public class ProfileFragment extends Fragment {
                                 .child("profileImg").setValue(downloadUrl)
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(getContext(),"Profile Picture Uploaded",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(),"Profile Picture Uploaded",Toast.LENGTH_SHORT).show();
+
                                     } else {
-                                        Toast.makeText(getContext(),"Failed to upload profile picture",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(),"Failed to upload profile picture",Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     });
                 })
                 .addOnFailureListener(e -> {
                     // Upload thất bại
-                    Toast.makeText(getContext(), "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
 
-    // Cập nhật thông tin người dùng
     private void updateUserProfile() {
         // Thực hiện cập nhật thông tin người dùng
     }

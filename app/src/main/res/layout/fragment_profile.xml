@@ -50,7 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_name" />
     <EditText
-        android:inputType="textPassword"
         android:id="@+id/profile_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
