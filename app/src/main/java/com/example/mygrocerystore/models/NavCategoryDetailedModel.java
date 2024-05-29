@@ -5,15 +5,19 @@ public class NavCategoryDetailedModel {
     String type;
     String img_url;
     String price;
+    String currentDate;
+    String currentTime;
 
     public NavCategoryDetailedModel() {
     }
 
-    public NavCategoryDetailedModel(String name, String type, String img_url, String price) {
+    public NavCategoryDetailedModel(String name, String type, String img_url, String price, String currentDate, String currentTime) {
         this.name = name;
         this.type = type;
         this.img_url = img_url;
         this.price = price;
+        this.currentDate = currentDate;
+        this.currentTime = currentTime;
     }
 
     public String getName() {
@@ -46,5 +50,21 @@ public class NavCategoryDetailedModel {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
+
+    public String getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(String currentTime) {
+        this.currentTime = currentTime;
     }
 }
